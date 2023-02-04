@@ -67,10 +67,21 @@ class PlayState extends FlxState
 
 		FlxG.collide(player, collisionMap);
 		FlxG.overlap(enemies, playerShots, bulletHitEnemy, checkBulletHitEnemy);
+		FlxG.overlap(player, enemies, playerHitEnemy, checkPlayerHitEnemy);
 
 		updateCrosshair();
 
 		checkSpawns(elapsed);
+	}
+
+	public function playerHitEnemy(Player:Player, Enemy:Enemy):Void
+	{
+		Player.stun();
+	}
+
+	public function checkPlayerHitEnemy(Player:Player, Enemy:Enemy):Bool
+	{
+		return Enemy.alive && Enemy.exists && Player.alive && Player.exists && Player.stunTimer <= 0;
 	}
 
 	public function checkBulletHitEnemy(Enemy:Enemy, Bullet:Bullet):Bool
