@@ -5,6 +5,7 @@ import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.tile.FlxBaseTilemap.FlxTilemapAutoTiling;
 import flixel.tile.FlxTilemap;
+import js.lib.webassembly.Global;
 import objects.GameMap;
 import objects.Player;
 
@@ -17,9 +18,11 @@ class PlayState extends FlxState
 
 	override public function create()
 	{
+		Globals.initGame();
+
 		// add background
 		add(background = new FlxSprite(0, 0));
-		background.makeGraphic(FlxG.width, FlxG.height, 0xff111111);
+		background.makeGraphic(FlxG.width, FlxG.height, 0xff462626);
 
 		// add collision map
 		add(collisionMap = new FlxTilemap());
@@ -28,7 +31,8 @@ class PlayState extends FlxState
 			FlxTilemapAutoTiling.OFF, 0, 1, 1);
 
 		// add player
-		// add(player = new Player());
+		add(player = new Player());
+		player.screenCenter();
 
 		// add foreground
 
@@ -38,5 +42,7 @@ class PlayState extends FlxState
 	override public function update(elapsed:Float)
 	{
 		super.update(elapsed);
+
+		FlxG.collide(player, collisionMap);
 	}
 }
