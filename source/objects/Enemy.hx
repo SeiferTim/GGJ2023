@@ -12,6 +12,8 @@ class Enemy extends FlxSprite
 	public static inline var SUCK_SPEED:Float = 1;
 	public static inline var ROOT_DAMAGE:Int = 10;
 
+	public static inline var BASE_HEALTH:Int = 10;
+
 	public var onRoot:Bool = false;
 
 	public var suckTimer:Float = SUCK_SPEED;
@@ -30,6 +32,7 @@ class Enemy extends FlxSprite
 		reset(X - width / 2, Y - height / 2);
 		onRoot = false;
 		suckTimer = SUCK_SPEED;
+		health = BASE_HEALTH;
 	}
 
 	override public function update(elapsed:Float):Void

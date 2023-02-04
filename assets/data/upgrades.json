@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Increased Damage",
+    "effect": "Increases damage by {x}%.",
+    "variable": "damage",
+    "ranks": [10, 20, 30, 40, 50]
+  },
+  {
+    "name": "Increased Rate of Fire",
+    "effect": "Increases Rate of Fire by {x}%.",
+    "variable": "fireRate",
+    "ranks": [10, 20, 30, 40, 50]
+  },
+  {
+    "name": "Increased Movement Speed",
+    "effect": "Increases Movement Speed by {x}%.",
+    "variable": "moveSpeed",
+    "ranks": [10, 20, 30, 40, 50]
+  },
+  {
+    "name": "Reduced Stun Time",
+    "effect": "Reduces Stun Time by {x}%.",
+    "variable": "stunTime",
+    "ranks": [10, 20, 30, 40, 50]
+  },
+  {
+    "name": "Spread Shot",
+    "effect": "Fires {x} extra projectile.",
+    "variable": "spread",
+    "ranks": [1, 2, 3, 4, 5]
+  }
+]

@@ -128,7 +128,7 @@ class PlayState extends FlxState
 
 	public function bulletHitEnemy(Enemy:Enemy, Bullet:Bullet):Void
 	{
-		Enemy.kill();
+		Enemy.hurt(player.damage);
 		Bullet.kill();
 	}
 
@@ -161,9 +161,20 @@ class PlayState extends FlxState
 
 	public function playerShoot(Count:Int = 1):Void
 	{
-		var b:Bullet = playerShots.getFirstAvailable(Bullet);
-		if (b == null)
-			playerShots.add(b = new Bullet());
-		b.spawn(player.x + (player.width / 2), player.y + (player.height / 2), true, FlxAngle.angleBetweenMouse(player), Player.BULLET_SPEED);
+		var b:Bullet = null;
+		var shots:Int = player.spread;
+		var startAngle:Float = -((shots - 1 / 2)) * 5;
+		for (i in 0...shots)
+		{
+			b = playerShots.getFirstAvailable(Bullet);
+			if (b == null)
+				playerShots.add(b = new Bullet());
+			b.spawn(player.x
+				+ (player.width / 2), player.y
+				+ (player.height / 2), true, FlxAngle.angleBetweenMouse(player, true)
+				+ startAngle
+				+ (10 * i),
+				Player.BULLET_SPEED);
+		}
 	}
 }
