@@ -2,6 +2,7 @@ package objects;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.math.FlxAngle;
 import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
@@ -23,7 +24,13 @@ class Enemy extends FlxSprite
 	public function new():Void
 	{
 		super();
-		makeGraphic(24, 24, FlxColor.YELLOW);
+
+		frames = FlxAtlasFrames.fromSparrow("assets/images/base_enemy.png", "assets/images/base_enemy.xml");
+		animation.addByNames("normal", ["base_enemy_0.png"]);
+		animation.addByNames("munch", ["base_enemy_1.png", "base_enemy_2.png"], 10, true);
+		setFacingFlip(LEFT, false, false);
+		setFacingFlip(RIGHT, true, false);
+
 		kill();
 	}
 
@@ -33,6 +40,7 @@ class Enemy extends FlxSprite
 		onRoot = false;
 		suckTimer = SUCK_SPEED;
 		health = BASE_HEALTH;
+		animation.play("normal");
 	}
 
 	override public function update(elapsed:Float):Void
@@ -45,22 +53,24 @@ class Enemy extends FlxSprite
 
 			// FlxAngle.angleBetweenPoint(this, FlxPoint.weak(FlxG.width / 2, FlxG.height / 2));
 			velocity.setPolarRadians(SPEED, angleToCenter);
-			// if moving left, face left, otherwise face right
-			// if (velocity.x < 0)
-			// {
-			// 	facing = LEFT;
-			// 	angle = FlxAngle.asDegrees(angleToCenter) + 180;
-			// }
-			// else
-			// {
-			// 	facing = RIGHT;
-			// 	angle = FlxAngle.asDegrees(angleToCenter);
-			// }
 
-			angle = FlxAngle.asDegrees(angleToCenter);
+			if (velocity.x < 0)
+			{
+				facing = LEFT;
+				angle = FlxAngle.asDegrees(angleToCenter) + 180;
+			}
+			else
+			{
+				facing = RIGHT;
+				angle = FlxAngle.asDegrees(angleToCenter);
+			}
+
+			// angle = FlxAngle.asDegrees(angleToCenter);
 		}
 		else
 		{
+			if (animation.name != "munch")
+				animation.play("munch");
 			velocity.set();
 			suckTimer -= elapsed;
 			if (suckTimer <= 0)
