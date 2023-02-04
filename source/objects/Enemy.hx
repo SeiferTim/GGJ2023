@@ -9,8 +9,12 @@ import flixel.util.FlxColor;
 class Enemy extends FlxSprite
 {
 	public static inline var SPEED:Float = 100;
+	public static inline var SUCK_SPEED:Float = 1;
+	public static inline var ROOT_DAMAGE:Int = 10;
 
 	public var onRoot:Bool = false;
+
+	public var suckTimer:Float = SUCK_SPEED;
 
 	// enemies will spawn on either side of the screen
 	// basic enemy type just moves towards the 'roots' in the center of the screen
@@ -25,6 +29,7 @@ class Enemy extends FlxSprite
 	{
 		reset(X - width / 2, Y - height / 2);
 		onRoot = false;
+		suckTimer = SUCK_SPEED;
 	}
 
 	override public function update(elapsed:Float):Void
@@ -32,7 +37,10 @@ class Enemy extends FlxSprite
 		if (!onRoot)
 		{
 			// move towards the center of the screen
-			var angleToCenter:Float = FlxAngle.angleBetweenPoint(this, FlxPoint.weak(FlxG.width / 2, FlxG.height / 2));
+			var angleToCenter:Float = FlxAngle.angleBetweenPoint(this,
+				FlxPoint.get(Globals.PlayState.roots.x + Globals.PlayState.roots.width / 2, Globals.PlayState.roots.y + Globals.PlayState.roots.height / 2));
+
+			// FlxAngle.angleBetweenPoint(this, FlxPoint.weak(FlxG.width / 2, FlxG.height / 2));
 			velocity.setPolarRadians(SPEED, angleToCenter);
 			// if moving left, face left, otherwise face right
 			// if (velocity.x < 0)
@@ -49,7 +57,15 @@ class Enemy extends FlxSprite
 			angle = FlxAngle.asDegrees(angleToCenter);
 		}
 		else
+		{
 			velocity.set();
+			suckTimer -= elapsed;
+			if (suckTimer <= 0)
+			{
+				suckTimer = SUCK_SPEED;
+				Globals.PlayState.rootHealth -= ROOT_DAMAGE;
+			}
+		}
 		super.update(elapsed);
 	}
 }
