@@ -18,6 +18,8 @@ class Player extends FlxSprite
 		super();
 		makeGraphic(32, 32, FlxColor.GREEN);
 
+		centerOrigin();
+
 		acceleration.y = GRAVITY;
 
 		maxVelocity.y = MAX_VELOCITY;
