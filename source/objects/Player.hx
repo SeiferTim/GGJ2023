@@ -10,8 +10,11 @@ class Player extends FlxSprite
 	public static inline var MOVE_SPEED:Float = 200;
 	public static inline var JUMP_SPEED:Float = 600;
 	public static inline var JUMP_TIME:Float = 0.2;
+	public static inline var FIRE_RATE:Float = 0.2;
+	public static inline var BULLET_SPEED:Float = 800;
 
 	public var jumpTimer:Float = 0;
+	public var fireTimer:Float = 0;
 
 	public function new():Void
 	{
@@ -33,6 +36,8 @@ class Player extends FlxSprite
 		var right:Bool = Actions.right.check();
 		var jump:Bool = Actions.up.check();
 
+		var attack:Bool = Actions.attack.check();
+
 		if (left && right)
 			left = right = false;
 
@@ -53,6 +58,15 @@ class Player extends FlxSprite
 		}
 		else
 			jumpTimer = 0;
+
+		if (fireTimer > 0)
+			fireTimer -= elapsed;
+
+		if (attack && fireTimer <= 0)
+		{
+			fireTimer = FIRE_RATE;
+			Globals.PlayState.playerShoot(1);
+		}
 
 		super.update(elapsed);
 	}

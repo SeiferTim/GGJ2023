@@ -7,6 +7,7 @@ import flixel.input.actions.FlxActionInput.FlxInputDevice;
 import flixel.input.actions.FlxActionInput.FlxInputDeviceID;
 import flixel.input.actions.FlxActionManager;
 import flixel.input.actions.FlxActionSet;
+import flixel.input.mouse.FlxMouseButton.FlxMouseButtonID;
 
 class Actions
 {
@@ -78,6 +79,8 @@ class Actions
 		Actions.attack.addGamepad(B, PRESSED);
 
 		Actions.rightStick.addMousePosition(MOVED, BOTH);
+
+		Actions.attack.addMouse(FlxMouseButtonID.LEFT, PRESSED);
 
 		Actions.actions.activateSet(Actions.gameplayIndex, FlxInputDevice.ALL, FlxInputDeviceID.ALL);
 	}

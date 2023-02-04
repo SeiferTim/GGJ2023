@@ -3,12 +3,12 @@ package states;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxAngle;
 import flixel.math.FlxPoint;
 import flixel.tile.FlxBaseTilemap.FlxTilemapAutoTiling;
 import flixel.tile.FlxTilemap;
-import flixel.util.FlxSave;
-import js.lib.webassembly.Global;
+import objects.Bullet;
 import objects.GameMap;
 import objects.Player;
 
@@ -21,11 +21,14 @@ class PlayState extends FlxState
 
 	public var crosshair:FlxSprite;
 
+	public var playerShots:FlxTypedGroup<Bullet>;
+
 	public static inline var CROSSHAIR_DIST:Float = 100;
 
 	override public function create()
 	{
 		Globals.initGame();
+		Globals.PlayState = this;
 
 		// add background
 		add(background = new FlxSprite(0, 0));
@@ -37,6 +40,8 @@ class PlayState extends FlxState
 		collisionMap.loadMapFromArray(mapData.baseLayerData, mapData.widthInTiles, mapData.heightInTiles, "assets/images/tiles.png", 4, 4,
 			FlxTilemapAutoTiling.OFF, 0, 1, 1);
 
+		add(playerShots = new FlxTypedGroup<Bullet>());
+
 		// add player
 		add(player = new Player());
 		player.screenCenter();
@@ -44,7 +49,7 @@ class PlayState extends FlxState
 		// add foreground
 
 		add(crosshair = new FlxSprite());
-		crosshair.makeGraphic(4, 4, 0xffffffff);
+		crosshair.makeGraphic(8, 8, 0xffffffff);
 		crosshair.centerOrigin();
 
 		super.create();
@@ -69,5 +74,13 @@ class PlayState extends FlxState
 
 		crosshair.x = player.x + (player.width / 2) + pos.x - (crosshair.width / 2);
 		crosshair.y = player.y + (player.height / 2) + pos.y - (crosshair.height / 2);
+	}
+
+	public function playerShoot(Count:Int = 1):Void
+	{
+		var b:Bullet = playerShots.getFirstAvailable(Bullet);
+		if (b == null)
+			playerShots.add(b = new Bullet());
+		b.spawn(player.x + (player.width / 2), player.y + (player.height / 2), true, FlxAngle.angleBetweenMouse(player), Player.BULLET_SPEED);
 	}
 }
