@@ -9,6 +9,7 @@ import flixel.math.FlxPoint;
 import flixel.tile.FlxBaseTilemap.FlxTilemapAutoTiling;
 import flixel.tile.FlxTilemap;
 import objects.Bullet;
+import objects.Enemy;
 import objects.GameMap;
 import objects.Player;
 
@@ -22,6 +23,9 @@ class PlayState extends FlxState
 	public var crosshair:FlxSprite;
 
 	public var playerShots:FlxTypedGroup<Bullet>;
+	public var enemies:FlxTypedGroup<Enemy>;
+
+	public var spawnTimer:Float = 5;
 
 	public static inline var CROSSHAIR_DIST:Float = 100;
 
@@ -39,6 +43,8 @@ class PlayState extends FlxState
 		var mapData:GameMap = Globals.MapList[0];
 		collisionMap.loadMapFromArray(mapData.baseLayerData, mapData.widthInTiles, mapData.heightInTiles, "assets/images/tiles.png", 4, 4,
 			FlxTilemapAutoTiling.OFF, 0, 1, 1);
+
+		add(enemies = new FlxTypedGroup<Enemy>());
 
 		add(playerShots = new FlxTypedGroup<Bullet>());
 
@@ -60,8 +66,39 @@ class PlayState extends FlxState
 		super.update(elapsed);
 
 		FlxG.collide(player, collisionMap);
+		FlxG.overlap(enemies, playerShots, bulletHitEnemy, checkBulletHitEnemy);
 
 		updateCrosshair();
+
+		checkSpawns(elapsed);
+	}
+
+	public function checkBulletHitEnemy(Enemy:Enemy, Bullet:Bullet):Bool
+	{
+		return Enemy.alive && Enemy.exists && Bullet.alive && Bullet.exists;
+	}
+
+	public function bulletHitEnemy(Enemy:Enemy, Bullet:Bullet):Void
+	{
+		Enemy.kill();
+		Bullet.kill();
+	}
+
+	public function checkSpawns(elapsed:Float)
+	{
+		spawnTimer -= elapsed;
+		if (spawnTimer <= 0)
+		{
+			spawnTimer = 5;
+			var e:Enemy = null;
+			for (i in 0...FlxG.random.int(2, 8))
+			{
+				e = enemies.getFirstAvailable(Enemy);
+				if (e == null)
+					enemies.add(e = new Enemy());
+				e.spawn(FlxG.random.bool() ? -50 : FlxG.width + 50, FlxG.random.float(-10, FlxG.height + 10));
+			}
+		}
 	}
 
 	public function updateCrosshair()
@@ -69,8 +106,6 @@ class PlayState extends FlxState
 		var angleToMouse:Float = FlxAngle.angleBetweenMouse(player);
 		var pos:FlxPoint = FlxPoint.get();
 		pos.setPolarRadians(CROSSHAIR_DIST, angleToMouse);
-
-		trace(angleToMouse, pos);
 
 		crosshair.x = player.x + (player.width / 2) + pos.x - (crosshair.width / 2);
 		crosshair.y = player.y + (player.height / 2) + pos.y - (crosshair.height / 2);
