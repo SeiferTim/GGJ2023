@@ -1,0 +1,45 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "map_01.tmx",
+    "expandedProjectPaths": [
+    ],
+    "fileStates": {
+        "map_01.tmx": {
+            "scale": 2.5471874999999997,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 399.6564838670102,
+                "y": 299.93865783339476
+            }
+        },
+        "simple.tsx": {
+            "scaleInDock": 23,
+            "scaleInEditor": 1
+        }
+    },
+    "last.exportedFilePath": "E:/Owner/Documents/GGJ2023/assets/data",
+    "last.imagePath": "E:/Owner/Documents/GGJ2023/assets/data",
+    "map.height": 150,
+    "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 4,
+    "map.tileWidth": 4,
+    "map.width": 200,
+    "openFiles": [
+        "map_01.tmx",
+        "simple.tsx"
+    ],
+    "project": "ggj2023.tiled-project",
+    "recentFiles": [
+        "simple.tsx",
+        "map_01.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 4,
+        "width": 4
+    }
+}
