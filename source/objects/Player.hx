@@ -39,7 +39,6 @@ class Player extends FlxSprite
 		acceleration.y = GRAVITY;
 
 		maxVelocity.y = MAX_VELOCITY;
-
 	}
 
 	override public function update(elapsed:Float):Void
@@ -136,5 +135,13 @@ class Player extends FlxSprite
 		if (upgrades.exists("fireRate"))
 			amt = upgrades.get("fireRate");
 		return FIRE_RATE * (1 - (amt / 100));
+	}
+
+	public function addUpgrade(Data:UpgradeData):UpgradeData
+	{
+		if (!upgrades.exists(Data.variable))
+			upgrades.set(Data.variable, Data.ranks.shift());
+		upgrades.set(Data.variable, Data.ranks.shift());
+		return Data;
 	}
 }
