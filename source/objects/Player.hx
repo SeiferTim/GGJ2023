@@ -32,7 +32,7 @@ class Player extends FlxSprite
 	public function new():Void
 	{
 		super();
-		makeGraphic(32, 32, FlxColor.GREEN);
+		loadGraphic("assets/images/player.png");
 
 		centerOrigin();
 
@@ -86,6 +86,8 @@ class Player extends FlxSprite
 			fireTimer = fireRate;
 			Globals.PlayState.playerShoot(1);
 		}
+
+		angularVelocity = velocity.x * 10;
 
 		super.update(elapsed);
 	}
@@ -141,7 +143,8 @@ class Player extends FlxSprite
 	{
 		if (!upgrades.exists(Data.variable))
 			upgrades.set(Data.variable, Data.ranks.shift());
-		upgrades.set(Data.variable, Data.ranks.shift());
+		else
+			upgrades.set(Data.variable, Data.ranks.shift());
 		return Data;
 	}
 }

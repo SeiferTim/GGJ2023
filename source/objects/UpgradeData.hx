@@ -7,11 +7,11 @@ class UpgradeData
 	public var variable:String = "";
 	public var ranks:Array<Int> = [];
 
-	public function new(Data:Dynamic):Void
+	public function new(Name:String, Effect:String, Variable:String, Ranks:Array<Int>):Void
 	{
-		name = Data.name;
-		effect = Data.effect;
-		variable = Data.variable;
-		ranks = Data.ranks;
+		name = Name;
+		effect = Effect;
+		variable = Variable;
+		ranks = Ranks;
 	}
 }

@@ -40,7 +40,7 @@
 	<source path="source" />
 
 	<assets path="assets/images" include="*.png|*.xml|*.jpg" embed="true" />
-	<assets path="assets/fonts" include="*.png|*.xml" embed="true" />
+	<!-- <assets path="assets/fonts" include="*.png|*.xml" embed="true" /> -->
 	<assets path="assets/music" rename="assets/music" include="*.ogg" embed="true" />
 	<assets path="assets/sounds" rename="assets/sounds" include="*.ogg|*.wav" embed="true" />
 

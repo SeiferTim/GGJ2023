@@ -31,7 +31,7 @@ class HUD extends FlxTypedGroup<FlxSprite>
 		add(waveNumber);
 		add(timeRemaining);
 		add(rootHealth);
-		forEach(function(sprite) sprite.scrollFactor.set(0, 0));
+		// forEach(function(sprite) sprite.scrollFactor.set(0, 0));
 	}
 
 	public function updateHUD(wave:Int, time:Float, health:Int)
