@@ -10,11 +10,11 @@ import flixel.tile.FlxBaseTilemap.FlxTilemapAutoTiling;
 import flixel.tile.FlxTilemap;
 import objects.Bullet;
 import objects.Enemy;
-import objects.HUD;
 import objects.GameMap;
 import objects.Player;
 import objects.Roots;
 import states.substates.PauseSubState;
+import ui.HUD;
 
 class PlayState extends FlxState
 {
@@ -27,7 +27,7 @@ class PlayState extends FlxState
 
 	public var playerShots:FlxTypedGroup<Bullet>;
 	public var enemies:FlxTypedGroup<Enemy>;
-	public var hud:FlxTypedGroup<HUD>;
+	public var hud:HUD;
 
 	public var roots:Roots;
 
@@ -74,7 +74,7 @@ class PlayState extends FlxState
 		crosshair.centerOrigin();
 
 		// add HUD
-		add(hud = new FlxTypedGroup<HUD>());
+		add(hud = new HUD());
 
 		super.create();
 	}
