@@ -18,7 +18,7 @@ class Bullet extends FlxSprite
 	{
 		reset(X - width / 2, Y - height / 2);
 		color = FromPlayer ? FlxColor.LIME : FlxColor.ORANGE;
-		velocity.setPolarRadians(Speed, Angle);
+		velocity.setPolarDegrees(Speed, Angle);
 	}
 
 	override public function update(elapsed:Float):Void
