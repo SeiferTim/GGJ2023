@@ -68,14 +68,13 @@ class PlayState extends FlxState
 		// add background
 		add(background = new FlxSprite(0, -900, "assets/images/background.png"));
 
-		sprouts.push(new FlxSprite("assets/images/sprout.png"));
-		sprouts.push(new FlxSprite("assets/images/sprout2.png"));
-		sprouts.push(new FlxSprite("assets/images/sprout3.png"));
+		sprouts.push(new FlxSprite(0, -900, "assets/images/sprout.png"));
+		sprouts.push(new FlxSprite(0, -900, "assets/images/sprout2.png"));
+		sprouts.push(new FlxSprite(0, -900, "assets/images/sprout3.png"));
 
 		for (i in 0...3)
 		{
 			add(sprouts[i]);
-			sprouts[i].scrollFactor.set();
 			sprouts[i].alpha = 0;
 			sprouts[i].kill();
 		}
@@ -140,7 +139,19 @@ class PlayState extends FlxState
 		openSubState(new UpgradeState(returnFromUpgrade));
 	}
 
-	public function returnFromUpgrade():Void {}
+	public function returnFromUpgrade():Void
+	{
+		waveNumber++;
+		FlxTween.tween(camTarget, {y: camTarget.y + 900}, 1, {
+			ease: FlxEase.sineInOut,
+			onComplete: (_) ->
+			{
+				sprouts[2].alpha = 0;
+				sprouts[2].kill();
+				startLevel();
+			}
+		});
+	}
 
 	public function startLevel():Void
 	{
@@ -240,41 +251,52 @@ class PlayState extends FlxState
 		for (x in enemies)
 			x.kill();
 		// player.exists = false;
+		sprouts[0].revive();
+		sprouts[1].revive();
+		sprouts[2].revive();
+
 		FlxTween.tween(camTarget, {y: camTarget.y - 900}, 2, {
 			ease: FlxEase.sineInOut,
-			startDelay: .33,
+			startDelay: .5,
 			onComplete: (_) ->
 			{
-				// show the sprouting bud, then show upgrade screen
-				sprouts[0].revive();
-				FlxTween.tween(sprouts[0], {alpha: 1}, .33, {
+				roots.scale.set(0.01, 0.01);
+			}
+		});
+
+		// show the sprouting bud, then show upgrade screen
+
+		FlxTween.tween(sprouts[0], {alpha: 1}, .5, {
+			startDelay: 2.5,
+			onComplete: (_) ->
+			{
+				FlxTween.tween(sprouts[0], {alpha: 0}, .5, {
 					onComplete: (_) ->
 					{
-						FlxTween.tween(sprouts[0], {alpha: 0}, .33, {
-							onComplete: (_) ->
-							{
-								sprouts[0].kill();
-							}
-						});
-						FlxTween.tween(sprouts[1], {alpha: 1}, .33, {
-							onComplete: (_) ->
-							{
-								FlxTween.tween(sprouts[1], {alpha: 0}, .33, {
-									onComplete: (_) ->
-									{
-										sprouts[1].kill();
-									}
-								});
-								FlxTween.tween(sprouts[2], {alpha: 1}, .33, {
-									onComplete: (_) ->
-									{
-										showUpgrades();
-									}
-								});
-							}
-						});
+						sprouts[0].kill();
 					}
 				});
+			}
+		});
+
+		FlxTween.tween(sprouts[1], {alpha: 1}, .5, {
+			startDelay: 3,
+			onComplete: (_) ->
+			{
+				FlxTween.tween(sprouts[1], {alpha: 0}, .5, {
+					onComplete: (_) ->
+					{
+						sprouts[1].kill();
+					}
+				});
+			}
+		});
+
+		FlxTween.tween(sprouts[2], {alpha: 1}, .5, {
+			startDelay: 3.5,
+			onComplete: (_) ->
+			{
+				showUpgrades();
 			}
 		});
 	}
