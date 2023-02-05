@@ -19,13 +19,12 @@ class HUD extends FlxTypedGroup<FlxSprite>
 	{
 		super();
 		// wave
-		waveNumber = new FlxText(20, FlxG.height - 20, 0, "0", 16);
+		waveNumber = new FlxText(20, FlxG.height - 40, 0, "0", 20);
 		// timer
-		timeRemaining = new FlxText(0, FlxG.height - 20, 0, "0", 16);
+		timeRemaining = new FlxText(0, FlxG.height - 40, 0, "0", 20);
 		timeRemaining.screenCenter(FlxAxes.X);
-		rootHealth.alignment = CENTER;
 		// root health
-		rootHealth = new FlxText(FlxG.width - 40, FlxG.height - 20, 0, "100", 16);
+		rootHealth = new FlxText(FlxG.width - 225, FlxG.height - 40, 0, "100", 20);
 		rootHealth.alignment = RIGHT;
 
 		add(waveNumber);
@@ -45,6 +44,6 @@ class HUD extends FlxTypedGroup<FlxSprite>
 		else
 			timeRemaining.text = "00:" + StringTools.lpad(roundedTime, "0", 2);
 		// root health
-		rootHealth.text = "Root Health:" + health + "%";
+		rootHealth.text = "Root Health " + health + "%";
 	}
 }
