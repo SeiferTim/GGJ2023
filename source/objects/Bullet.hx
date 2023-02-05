@@ -10,7 +10,7 @@ class Bullet extends FlxSprite
 	public function new():Void
 	{
 		super();
-		makeGraphic(12, 12, FlxColor.WHITE);
+		loadGraphic("assets/images/bullet.png", false);
 		kill();
 	}
 
