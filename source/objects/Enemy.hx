@@ -49,7 +49,8 @@ class Enemy extends FlxSprite
 		{
 			// move towards the center of the screen
 			var angleToCenter:Float = FlxAngle.angleBetweenPoint(this,
-				FlxPoint.get(Globals.PlayState.roots.x + Globals.PlayState.roots.width / 2, Globals.PlayState.roots.y + Globals.PlayState.roots.height / 2));
+				FlxPoint.get(Globals.PlayState.roots.x + Globals.PlayState.roots.width / 2,
+					Math.max(150, Globals.PlayState.roots.y + Globals.PlayState.roots.height / 2)));
 
 			// FlxAngle.angleBetweenPoint(this, FlxPoint.weak(FlxG.width / 2, FlxG.height / 2));
 			velocity.setPolarRadians(SPEED, angleToCenter);

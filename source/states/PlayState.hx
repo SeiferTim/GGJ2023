@@ -12,6 +12,7 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import objects.Bullet;
+import objects.Death;
 import objects.Enemy;
 import objects.Player;
 import objects.Roots;
@@ -32,6 +33,7 @@ class PlayState extends FlxState
 
 	public var playerShots:FlxTypedGroup<Bullet>;
 	public var enemies:FlxTypedGroup<Enemy>;
+	public var deaths:FlxTypedGroup<Death>;
 	public var hud:HUD;
 
 	public var roots:Roots;
@@ -93,6 +95,8 @@ class PlayState extends FlxState
 		roots.y = 0;
 
 		add(enemies = new FlxTypedGroup<Enemy>());
+
+		add(deaths = new FlxTypedGroup<Death>());
 
 		add(playerShots = new FlxTypedGroup<Bullet>());
 
@@ -249,7 +253,10 @@ class PlayState extends FlxState
 	{
 		gameMode = "showsprout";
 		for (x in enemies)
+		{
+			spawnDeath(x);
 			x.kill();
+		}
 		// player.exists = false;
 		sprouts[0].revive();
 		sprouts[1].revive();
@@ -331,7 +338,17 @@ class PlayState extends FlxState
 	public function bulletHitEnemy(Enemy:Enemy, Bullet:Bullet):Void
 	{
 		Enemy.hurt(player.damage);
+		if (!Enemy.alive)
+			spawnDeath(Enemy);
 		Bullet.kill();
+	}
+
+	public function spawnDeath(E:Enemy):Void
+	{
+		var d:Death = deaths.getFirstAvailable();
+		if (d == null)
+			deaths.add(d = new Death());
+		d.spawn(E);
 	}
 
 	public function checkSpawns(elapsed:Float)

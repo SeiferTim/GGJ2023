@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureAtlas imagePath="sprites.png">
+	<!--
+	Created with ShoeBox
+	http://renderhjs.net/shoebox/
+	-->
+	<SubTexture name="death_0.png"	x="0"	y="94"	width="75"	height="71" frameX="-5" frameY="-1" frameWidth="96" frameHeight="96"/>
+	<SubTexture name="death_1.png"	x="0"	y="0"	width="93"	height="93" frameX="-2" frameY="-0" frameWidth="96" frameHeight="96"/>
+</TextureAtlas>
