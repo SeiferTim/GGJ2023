@@ -14,6 +14,7 @@ import objects.HUD;
 import objects.GameMap;
 import objects.Player;
 import objects.Roots;
+import states.substates.PauseSubState;
 
 class PlayState extends FlxState
 {
@@ -88,13 +89,23 @@ class PlayState extends FlxState
 	{
 		super.update(elapsed);
 
+		if (Actions.pause.check())
+		{
+			openSubState(new PauseSubState());
+			return;
+		}
+
 		levelTimer += elapsed;
-		roots.scale.set(levelTimer / 60, levelTimer / 60);
+		roots.scale.set(Math.min(1, levelTimer / 60), Math.min(1, levelTimer / 60));
 		roots.updateHitbox();
 		roots.x = FlxG.width / 2 - roots.width / 2;
-		if (levelTimer >= 60)
+		if (levelTimer >= 60 && enemies.countLiving() == 0)
 		{
 			// wave is complete!
+		}
+		else if (rootHealth <= 0)
+		{
+			// game over!
 		}
 		hud.updateHUD(waveNumber, levelTimer, rootHealth);
 

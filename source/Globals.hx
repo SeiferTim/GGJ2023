@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxG;
 import states.PlayState;
 
 @:build(macros.MapBuilder.build()) // MapList
@@ -14,6 +15,8 @@ class Globals
 	{
 		if (initialized)
 			return;
+
+		FlxG.autoPause = false;
 
 		Actions.init();
 
