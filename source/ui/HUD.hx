@@ -1,8 +1,9 @@
 package ui;
 
-import flixel.FlxSprite;
 import flixel.FlxG;
+import flixel.FlxSprite;
 import flixel.group.FlxGroup;
+import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.util.FlxAxes;
 
@@ -12,17 +13,19 @@ class HUD extends FlxTypedGroup<FlxSprite>
 	var waveNumber:FlxText;
 	var timeRemaining:FlxText;
 	var rootHealth:FlxText;
+	var roundedTime:String;
 
 	public function new():Void
 	{
 		super();
 		// wave
-		waveNumber = new FlxText(20, FlxG.height - 20, 0, "0", 12);
+		waveNumber = new FlxText(20, FlxG.height - 20, 0, "0", 16);
 		// timer
-		timeRemaining = new FlxText(0, FlxG.height - 20, 0, "0", 12);
+		timeRemaining = new FlxText(0, FlxG.height - 20, 0, "0", 16);
 		timeRemaining.screenCenter(FlxAxes.X);
+		rootHealth.alignment = CENTER;
 		// root health
-		rootHealth = new FlxText(FlxG.width - 20, FlxG.height - 20, 0, "100", 12);
+		rootHealth = new FlxText(FlxG.width - 40, FlxG.height - 20, 0, "100", 16);
 		rootHealth.alignment = RIGHT;
 
 		add(waveNumber);
@@ -33,8 +36,15 @@ class HUD extends FlxTypedGroup<FlxSprite>
 
 	public function updateHUD(wave:Int, time:Float, health:Int)
 	{
+		// wave
 		waveNumber.text = "Wave " + wave;
-		timeRemaining.text = Std.string(time);
-		rootHealth.text = "Root Health:" + health;
+		// timer
+		roundedTime = Std.string(Std.int(time));
+		if (roundedTime == "60")
+			timeRemaining.text = "01:00";
+		else
+			timeRemaining.text = "00:" + StringTools.lpad(roundedTime, "0", 2);
+		// root health
+		rootHealth.text = "Root Health:" + health + "%";
 	}
 }
