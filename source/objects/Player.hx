@@ -93,7 +93,7 @@ class Player extends FlxSprite
 			Globals.PlayState.playerShoot(1);
 		}
 
-		angularVelocity = velocity.x * 10;
+		angularVelocity = velocity.x * 2;
 
 		super.update(elapsed);
 	}
