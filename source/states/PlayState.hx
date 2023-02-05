@@ -53,6 +53,8 @@ class PlayState extends FlxState
 
 	public var anyKey:FlxText;
 
+	public var sprouts:Array<FlxSprite> = [];
+
 	override public function create()
 	{
 		Globals.initGame();
@@ -65,6 +67,18 @@ class PlayState extends FlxState
 
 		// add background
 		add(background = new FlxSprite(0, -900, "assets/images/background.png"));
+
+		sprouts.push(new FlxSprite("assets/images/sprout.png"));
+		sprouts.push(new FlxSprite("assets/images/sprout2.png"));
+		sprouts.push(new FlxSprite("assets/images/sprout3.png"));
+
+		for (i in 0...3)
+		{
+			add(sprouts[i]);
+			sprouts[i].scrollFactor.set();
+			sprouts[i].alpha = 0;
+			sprouts[i].kill();
+		}
 
 		add(title = new FlxSprite(0, -900, "assets/images/title.png"));
 
@@ -92,9 +106,9 @@ class PlayState extends FlxState
 
 		add(playerGun = new FlxSprite("assets/images/weapon.png"));
 		playerGun.width = playerGun.height = 28;
-		playerGun.offset.y = 46;
-		playerGun.origin.x = 14;
-		playerGun.origin.y = 60;
+		playerGun.offset.x = 46;
+		playerGun.origin.y = 14;
+		playerGun.origin.x = 60;
 
 		// add foreground
 
@@ -123,8 +137,10 @@ class PlayState extends FlxState
 
 	public function showUpgrades():Void
 	{
-		openSubState(new UpgradeState());
+		openSubState(new UpgradeState(returnFromUpgrade));
 	}
+
+	public function returnFromUpgrade():Void {}
 
 	public function startLevel():Void
 	{
@@ -178,15 +194,17 @@ class PlayState extends FlxState
 				roots.scale.set(Math.min(1, levelTimer / 60), Math.min(1, levelTimer / 60));
 				roots.updateHitbox();
 				roots.x = FlxG.width / 2 - roots.width / 2;
-				if (levelTimer >= 60 && enemies.countLiving() == 0)
+				if (levelTimer >= 60)
 				{
 					// wave is complete!
 					waveComplete();
+					return;
 				}
 				else if (rootHealth <= 0)
 				{
 					// game over!
 					gameOver();
+					return;
 				}
 				hud.updateHUD(waveNumber, levelTimer, rootHealth);
 
@@ -219,19 +237,52 @@ class PlayState extends FlxState
 	public function waveComplete():Void
 	{
 		gameMode = "showsprout";
+		for (x in enemies)
+			x.kill();
 		// player.exists = false;
 		FlxTween.tween(camTarget, {y: camTarget.y - 900}, 2, {
 			ease: FlxEase.sineInOut,
-			onComplete: (_) -> {
+			startDelay: .33,
+			onComplete: (_) ->
+			{
 				// show the sprouting bud, then show upgrade screen
+				sprouts[0].revive();
+				FlxTween.tween(sprouts[0], {alpha: 1}, .33, {
+					onComplete: (_) ->
+					{
+						FlxTween.tween(sprouts[0], {alpha: 0}, .33, {
+							onComplete: (_) ->
+							{
+								sprouts[0].kill();
+							}
+						});
+						FlxTween.tween(sprouts[1], {alpha: 1}, .33, {
+							onComplete: (_) ->
+							{
+								FlxTween.tween(sprouts[1], {alpha: 0}, .33, {
+									onComplete: (_) ->
+									{
+										sprouts[1].kill();
+									}
+								});
+								FlxTween.tween(sprouts[2], {alpha: 1}, .33, {
+									onComplete: (_) ->
+									{
+										showUpgrades();
+									}
+								});
+							}
+						});
+					}
+				});
 			}
 		});
 	}
 
 	public function checkRootsHitEnemy(Root:Roots, Enemy:Enemy):Bool
 	{
-		return (!Enemy.onRoot && Enemy.alive && Enemy.exists && Root.alive && Root.exists && Enemy.x > 70 && Enemy.x < FlxG.width - 70 && Enemy.y > 70
-			&& Enemy.y < FlxG.height - 70);
+		return (!Enemy.onRoot && Enemy.alive && Enemy.exists && Root.alive && Root.exists && Enemy.x > 150 && Enemy.x < FlxG.width - 150 && Enemy.y > 150
+			&& Enemy.y < FlxG.height - 150);
 	}
 
 	public function rootsHitEnemy(Root:Roots, Enemy:Enemy):Void
@@ -266,14 +317,14 @@ class PlayState extends FlxState
 		spawnTimer -= elapsed;
 		if (spawnTimer <= 0)
 		{
-			spawnTimer = 5;
+			spawnTimer = 10 * (1 - (waveNumber / 10));
 			var e:Enemy = null;
-			for (i in 0...FlxG.random.int(2, 8))
+			for (i in 0...FlxG.random.int(Std.int(1 * (1 + waveNumber / 25)), Std.int(5 * (1 + waveNumber / 50))))
 			{
 				e = enemies.getFirstAvailable(Enemy);
 				if (e == null)
 					enemies.add(e = new Enemy());
-				e.spawn(FlxG.random.bool() ? -50 : FlxG.width + 50, FlxG.random.float(-10, FlxG.height + 10));
+				e.spawn(FlxG.random.bool() ? -50 : FlxG.width + 50, FlxG.random.float(100, FlxG.height + 10));
 			}
 		}
 	}
@@ -290,7 +341,7 @@ class PlayState extends FlxState
 		playerGun.x = player.x + (player.width / 2) - (playerGun.width / 2);
 		playerGun.y = player.y + (player.height / 2) - (playerGun.height / 2);
 
-		playerGun.angle = FlxAngle.asDegrees(angleToMouse);
+		playerGun.angle = FlxAngle.asDegrees(angleToMouse) - 180;
 	}
 
 	public function playerShoot(Count:Int = 1):Void
@@ -318,14 +369,16 @@ class PlayState extends FlxState
 		// player.exists = false;
 
 		var goScreen:FlxSprite = new FlxSprite(0, 0, "assets/images/gameover.png");
+		add(goScreen);
 		goScreen.scrollFactor.set();
 		goScreen.alpha = 0;
 
 		var goText:FlxText = new FlxText(0, 0, FlxG.width, "Press Any Key to Restart");
-		goText.setFormat(null, 16, 0xFFFFFFFF, "center");
+		add(goText);
+		goText.setFormat(null, 22, 0xFFFFFFFF, "center");
 		goText.scrollFactor.set();
 		goText.setBorderStyle(FlxTextBorderStyle.OUTLINE, 0xFF000000, 1);
-		goText.y = FlxG.height - goText.height - 10;
+		goText.y = FlxG.height - goText.height - 20;
 		goText.alpha = 0;
 
 		FlxTween.tween(goScreen, {alpha: 1}, .2);

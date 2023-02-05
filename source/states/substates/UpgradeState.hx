@@ -28,18 +28,27 @@ class UpgradeState extends FlxSubState
 
 	public var choices:Array<UpgradeData> = [];
 
+	public function new(Callback:Void->Void):Void
+	{
+		super();
+
+		closeCallback = Callback;
+	}
+
 	override public function create():Void
 	{
 		// FlxG.width/2 centers sprite. -FlxG.width/4 reduce width of sprite b about 25% b/c we don't want menu to take up whole screen
 		bg = new FlxSprite(Std.int(FlxG.width / 2 - FlxG.width / 4), Std.int(FlxG.height / 2 - FlxG.height / 4));
 		// Make and center
 		bg.makeGraphic(Std.int(FlxG.width / 2), Std.int(FlxG.height / 2), 0xff800080);
+		bg.scrollFactor.set();
 		add(bg);
 
 		// Origin point of header is the top left corner of the bg object. Width is width of bg
 		header = new FlxText(bg.x, bg.y + 10, bg.width, "Choose an Upgrade");
 		header.setFormat(null, 24, 0xFFFFFF, "center"); // Center text width width of bg
 		header.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2, 1);
+		header.scrollFactor.set();
 		add(header);
 
 		// Divide bg into 3 evenly spaced columns
@@ -58,45 +67,54 @@ class UpgradeState extends FlxSubState
 		// How big is column1
 		column1.makeGraphic(columnWidth, columnHeight, 0xFF222222);
 		column1.label.setFormat(null, 16, 0xFFFFFF, "center");
+		column1.scrollFactor.set();
 		add(column1);
 
 		// Height stays the same across all columns. Add width b/c this is where the second column starts
 		column2 = new FlxButton(Std.int(bg.x) + columnWidth, header.y + header.height + 20, "", chose.bind(1));
 		column2.makeGraphic(columnWidth, columnHeight, 0xFF4D3D07);
 		column2.label.setFormat(null, 16, 0xFFFFFF, "center");
+		column2.scrollFactor.set();
 		add(column2);
 
 		column3 = new FlxButton(Std.int(bg.x) + (columnWidth * 2), header.y + header.height + 20, "", chose.bind(2));
 		column3.makeGraphic(columnWidth, columnHeight, 0xFF11311D);
 		column3.label.setFormat(null, 16, 0xFFFFFF, "center");
+		column3.scrollFactor.set();
 		add(column3);
 
 		add(choiceAName = new FlxText(column1.x, column1.y + 10, column1.width, choices[0].name));
 		choiceAName.setFormat(null, 18, 0xFFFFFF, "center");
 		choiceAName.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2, 1);
+		choiceAName.scrollFactor.set();
 
 		add(choiceADesc = new FlxText(column1.x, choiceAName.y + choiceAName.height + 10, column1.width,
 			choices[0].effect.replace("{x}", Std.string(choices[0].ranks[0]))));
 		choiceADesc.setFormat(null, 12, 0xFFFFFF, "center");
 		choiceADesc.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2, 1);
+		choiceADesc.scrollFactor.set();
 
 		add(choiceBName = new FlxText(column2.x, column2.y + 10, column2.width, choices[1].name));
 		choiceBName.setFormat(null, 18, 0xFFFFFF, "center");
 		choiceBName.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2, 1);
+		choiceBName.scrollFactor.set();
 
 		add(choiceBDesc = new FlxText(column2.x, choiceBName.y + choiceBName.height + 10, column2.width,
 			choices[1].effect.replace("{x}", Std.string(choices[1].ranks[0]))));
 		choiceBDesc.setFormat(null, 12, 0xFFFFFF, "center");
 		choiceBDesc.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2, 1);
+		choiceBDesc.scrollFactor.set();
 
 		add(choiceCName = new FlxText(column3.x, column3.y + 10, column3.width, choices[2].name));
 		choiceCName.setFormat(null, 18, 0xFFFFFF, "center");
 		choiceCName.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2, 1);
+		choiceCName.scrollFactor.set();
 
 		add(choiceCDesc = new FlxText(column3.x, choiceCName.y + choiceCName.height + 10, column3.width,
 			choices[2].effect.replace("{x}", Std.string(choices[2].ranks[0]))));
 		choiceCDesc.setFormat(null, 12, 0xFFFFFF, "center");
 		choiceCDesc.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2, 1);
+		choiceCDesc.scrollFactor.set();
 	}
 
 	public function chose(Which:Int):Void

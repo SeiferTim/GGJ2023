@@ -11,7 +11,7 @@ class Enemy extends FlxSprite
 {
 	public static inline var SPEED:Float = 100;
 	public static inline var SUCK_SPEED:Float = 1;
-	public static inline var ROOT_DAMAGE:Int = 10;
+	public static inline var ROOT_DAMAGE:Int = 2;
 
 	public static inline var BASE_HEALTH:Int = 10;
 
