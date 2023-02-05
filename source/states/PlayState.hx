@@ -7,6 +7,7 @@ import flixel.FlxState;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxAngle;
 import flixel.math.FlxPoint;
+import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -164,6 +165,18 @@ class PlayState extends FlxState
 		gameMode = "ingame";
 		// player.exists = true;
 		crosshair.visible = hud.visible = true;
+		if (waveNumber <= 2)
+		{
+			FlxG.sound.playMusic("assets/music/intensity-1.ogg", 0.3, true);
+		}
+		else if (waveNumber <= 4)
+		{
+			FlxG.sound.playMusic("assets/music/intensity-2.ogg", 0.3, true);
+		}
+		else
+		{
+			FlxG.sound.playMusic("assets/music/intensity-3.ogg", 0.3, true);
+		}
 	}
 
 	override public function update(elapsed:Float)
@@ -179,6 +192,7 @@ class PlayState extends FlxState
 				if (FlxG.keys.anyJustReleased([ANY]))
 				{
 					gameMode = "togame";
+					FlxG.sound.play(AssetPaths.start__ogg, 1, false);
 					FlxTween.cancelTweensOf(anyKey);
 					FlxTween.tween(anyKey, {alpha: 0}, .2);
 					FlxTween.tween(title, {alpha: 0}, 1, {
@@ -200,6 +214,7 @@ class PlayState extends FlxState
 			case "ingame":
 				if (Actions.pause.check())
 				{
+					FlxG.sound.play(AssetPaths.pauseon__ogg, 1, false);
 					openSubState(new PauseSubState());
 
 					return;
@@ -388,6 +403,7 @@ class PlayState extends FlxState
 		var b:Bullet = null;
 		var shots:Int = player.spread;
 		var startAngle:Float = -((shots - 1 / 2)) * 5;
+		FlxG.sound.play(AssetPaths.shoot__flac, 1, false);
 		for (i in 0...shots)
 		{
 			b = playerShots.getFirstAvailable(Bullet);
@@ -405,6 +421,7 @@ class PlayState extends FlxState
 	public function gameOver():Void
 	{
 		gameMode = "gameover";
+		FlxG.sound.play(AssetPaths.gameover__ogg, 1, false);
 		// player.exists = false;
 
 		var goScreen:FlxSprite = new FlxSprite(0, 0, "assets/images/gameover.png");

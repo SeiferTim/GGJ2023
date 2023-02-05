@@ -3,6 +3,7 @@ package states.substates;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxSubState;
+import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxAxes;
@@ -12,6 +13,7 @@ class PauseSubState extends FlxSubState
 	public var bg:FlxSprite;
 	public var resumeButton:FlxButton;
 	public var quitButton:FlxButton;
+	public var pauseOffSound:FlxSound;
 
 	override public function create():Void
 	{
@@ -30,11 +32,14 @@ class PauseSubState extends FlxSubState
 		quitButton.y = (FlxG.height - quitButton.height) / 2 + 20;
 		add(quitButton);
 
+		pauseOffSound = FlxG.sound.load(AssetPaths.pauseoff__ogg);
+
 		super.create();
 	}
 
 	public function resume():Void
 	{
+		pauseOffSound.play();
 		close();
 	}
 

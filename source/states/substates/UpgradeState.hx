@@ -114,7 +114,11 @@ class UpgradeState extends FlxSubState
 			choices[2].effect.replace("{x}", Std.string(choices[2].ranks[0]))));
 		choiceCDesc.setFormat(null, 12, 0xFFFFFF, "center");
 		choiceCDesc.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2, 1);
-		choiceCDesc.scrollFactor.set();
+    choiceCDesc.scrollFactor.set();
+
+
+		FlxG.sound.playMusic("assets/music/chillandselectupgrade.ogg", 1, true);
+
 	}
 
 	public function chose(Which:Int):Void
