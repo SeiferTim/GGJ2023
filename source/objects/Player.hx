@@ -2,6 +2,7 @@ package objects;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.system.FlxSound;
 import flixel.util.FlxColor;
 
 class Player extends FlxSprite
@@ -29,6 +30,8 @@ class Player extends FlxSprite
 
 	public var upgrades:Map<String, Int> = [];
 
+	public var jumpSound:FlxSound;
+
 	public function new():Void
 	{
 		super();
@@ -39,6 +42,8 @@ class Player extends FlxSprite
 		acceleration.y = GRAVITY;
 
 		maxVelocity.y = MAX_VELOCITY;
+
+		jumpSound = FlxG.sound.load(AssetPaths.jump__ogg);
 	}
 
 	override public function update(elapsed:Float):Void
@@ -69,6 +74,7 @@ class Player extends FlxSprite
 		{
 			velocity.y = -JUMP_SPEED;
 			jumpTimer = JUMP_TIME;
+			FlxG.sound.play(AssetPaths.jump__ogg, 1, false);
 		}
 		else if (jump && jumpTimer > 0)
 		{
