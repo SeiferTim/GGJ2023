@@ -10,6 +10,7 @@ import flixel.tile.FlxBaseTilemap.FlxTilemapAutoTiling;
 import flixel.tile.FlxTilemap;
 import objects.Bullet;
 import objects.Enemy;
+import objects.HUD;
 import objects.GameMap;
 import objects.Player;
 import objects.Roots;
@@ -25,6 +26,7 @@ class PlayState extends FlxState
 
 	public var playerShots:FlxTypedGroup<Bullet>;
 	public var enemies:FlxTypedGroup<Enemy>;
+	public var hud:FlxTypedGroup<HUD>;
 
 	public var roots:Roots;
 
@@ -33,6 +35,7 @@ class PlayState extends FlxState
 	public var levelTimer:Float = 0;
 
 	public var rootHealth:Int = 100;
+	public var waveNumber:Int = 1;
 
 	public static inline var CROSSHAIR_DIST:Float = 100;
 
@@ -69,6 +72,9 @@ class PlayState extends FlxState
 		crosshair.makeGraphic(8, 8, 0xffffffff);
 		crosshair.centerOrigin();
 
+		// add HUD
+		add(hud = new FlxTypedGroup<HUD>());
+
 		super.create();
 	}
 
@@ -90,6 +96,7 @@ class PlayState extends FlxState
 		{
 			// wave is complete!
 		}
+		hud.updateHUD(waveNumber, levelTimer, rootHealth);
 
 		FlxG.collide(player, collisionMap);
 		FlxG.overlap(enemies, playerShots, bulletHitEnemy, checkBulletHitEnemy);
@@ -109,6 +116,7 @@ class PlayState extends FlxState
 	public function rootsHitEnemy(Root:Roots, Enemy:Enemy):Void
 	{
 		Enemy.onRoot = true;
+		hud.updateHUD(waveNumber, levelTimer, rootHealth);
 	}
 
 	public function playerHitEnemy(Player:Player, Enemy:Enemy):Void
